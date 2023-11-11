@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .forms import NewItemForm, EditItemForm
 from .models import Category, Item,Cart
+from django.http import JsonResponse
 
 def items(request):
     query = request.GET.get('query', '')
@@ -77,3 +78,7 @@ def delete(request, pk):
     item.delete()
 
     return redirect('dashboard:index')
+
+def get_data(request):
+    data = Item.objects.values()  # Retrieve all data from the Item model
+    return JsonResponse(list(data), safe=False)

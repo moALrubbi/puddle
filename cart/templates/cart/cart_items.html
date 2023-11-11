@@ -1,30 +1,41 @@
+<!-- cart/cart_items.html -->
+
 {% extends 'core/base.html' %}
 
-{% block title %}Conversation{% endblock %}
+{% block title %}Items in Cart{% endblock %}
 
 {% block content %}
 <h1 class="text-3xl font-semibold mb-6">Items in Cart</h1>
-
-<div class="grid grid-cols-3 gap-6">
-    {% for item in items_in_cart %}
-        <div class="border rounded-lg p-6">
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full mb-4 rounded-lg shadow-md">
-
-            <h2 class="text-xl font-semibold mb-2">{{ item.name }}</h2>
-            <p class="text-gray-600 mb-2">${{ item.price }}</p>
-            <p class="text-gray-700 mb-4">{{ item.description }}</p>
-
-            <!-- Quantity field for each item -->
-            <label for="quantity_{{ item.pk }}" class="text-gray-600 block mb-2">Quantity:</label>
-            <input type="number" id="quantity_{{ item.pk }}" name="quantity" value="1" class="rounded-md border-gray-300 py-2 px-3 mb-4 w-1/2">
-
-            <!-- Remove button for each item -->
-            <form method="post" action="{% url 'remove_from_cart' pk=item.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="block py-2 px-4 bg-red-500 text-white rounded-md text-center font-semibold hover:bg-red-700">Remove from Cart</button>
-            </form>
-            
-        </div>
-    {% endfor %}
-</div>
+{% if items_in_cart %}
+    <div class="grid grid-cols-1 gap-6">
+        {% for cart_item in items_in_cart %}
+            <div class="border rounded-lg p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <form method="post" action="{% url 'remove_from_cart' pk=cart_item.item.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="block py-2 px-4 bg-red-500 text-white rounded-md text-center font-semibold hover:bg-red-700 mr-4">Remove</button>
+                    </form>
+                    <img src="{{ cart_item.item.image.url }}" alt="{{ cart_item.item.name }}" class="w-24 h-24 mr-4 rounded-lg shadow-md">
+                    <div>
+                        <h2 class="text-xl font-semibold mb-2">{{ cart_item.item.name }}</h2>
+                        <p class="text-gray-600 mb-1">${{ cart_item.item.price }}</p>
+                        <p class="text-gray-700 mb-2">{{ cart_item.item.description }}</p>
+                    </div>
+                </div>
+                <form method="post" action="{% url 'update_quantity' pk=cart_item.item.pk %}">
+                    {% csrf_token %}
+                    <!-- Set max quantity based on available stock -->
+                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" max="{{ cart_item.item.stocks }}">
+                    <button type="submit" class="block py-2 px-4 bg-blue-500 text-white rounded-md text-center font-semibold hover:bg-blue-700">Update Quantity</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- Display Total Price -->
+    <div class="text-2xl font-semibold mt-8" id="totalPrice">
+        Total Price: ${{ total_price }}
+    </div>
+{% else %}
+    <p>Your cart is currently empty.</p>
+{% endif %}
 {% endblock %}

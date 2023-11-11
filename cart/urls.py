@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.cart_items, name='cart_items'),  # Define the cart items view without /cart
     path('remove/<int:pk>/', views.remove_from_cart, name='remove_from_cart'),  # URL for removing items from the cart
     path('cart/', views.cart_items, name='cart'),
+    
+    path('update_quantity/<int:pk>/', views.update_quantity, name='update_quantity'),
     path('', cart_items, name='cart'),  # Define the URL path for cart
-    # Other URL patterns for the cart app if present
 ]

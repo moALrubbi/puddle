@@ -10,5 +10,6 @@ urlpatterns = [
     path('inbox/', include('conversation.urls')),
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls')),  # Include the URLs from the cart app
+    path('item/', include('item.urls')),  # Include your app's URLs
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
