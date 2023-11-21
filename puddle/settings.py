@@ -48,25 +48,34 @@ INSTALLED_APPS = [
     'cart',
     'rest_framework',
     'corsheaders',
+    'checkout',
+    'orders',
+  
 
 ]
+CORS_ALLOW_CREDENTIALS = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+}
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','http://localhost:3000']
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.security.SecurityMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Add your frontend URL
+    "http://localhost:8000",  # Add your backend URL with the correct scheme and netloc
 ]
-
 ROOT_URLCONF = 'puddle.urls'
 
 TEMPLATES = [
@@ -146,3 +155,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+APPEND_SLASH = False
+CSRF_COOKIE_SECURE = True  # Set to True if your site uses HTTPS
+CSRF_COOKIE_SAMESITE = 'None'  # Set to 'None' for cross-origin requests with credentials

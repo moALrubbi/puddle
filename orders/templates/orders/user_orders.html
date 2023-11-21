@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+
+{% block title %}User Orders{% endblock %}
+
+{% block content %}
+<!-- Your existing template content -->
+
+{% if user_orders %}
+    <div class="grid grid-cols-1 gap-6">
+        {% for user_order in user_orders %}
+            <div class="border rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                    <strong class="cursor-pointer order-toggle">Order Number: {{ user_order.pk }}</strong>
+                    <strong>Total Order Price: ${{ user_order.total_price }}</strong>
+                </div>
+                <div class="order-details hidden mt-4">
+                    <ul>
+                        {% for order_item in user_order.orderitem_set.all %}
+                            <li class="flex items-center mb-4">
+                                <img src="{{ order_item.item.image.url }}" alt="{{ order_item.item.name }}" class="w-24 h-24 mr-4 rounded-lg shadow-md">
+                                <div>
+                                    <h2 class="text-xl font-semibold mb-2">{{ order_item.item.name }}</h2>
+                                    <p class="text-gray-600 mb-1">Price per unit: ${{ order_item.item.price }}</p>
+                                    <p class="text-gray-700 mb-2">Quantity: {{ order_item.quantity }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="delivery-info">
+                        <h3>Delivery Information:</h3>
+                        <ul>
+                            <li>First Name: {{ user_order.delivery_info.first_name }}</li>
+                            <li>Last Name: {{ user_order.delivery_info.last_name }}</li>
+                            <!-- Include other delivery information fields as needed -->
+                        </ul>
+                    </div>
+                    <!-- Other order details -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No orders available.</p>
+{% endif %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var toggles = document.querySelectorAll('.order-toggle');
+
+        toggles.forEach(function(toggle) {
+            toggle.addEventListener('click', function() {
+                var details = toggle.parentNode.nextElementSibling;
+                details.classList.toggle('hidden');
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,8 +1,9 @@
+#cart/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from .models import Cart, Item, CartItem
+from .models import Cart, Item, CartItem, update_stocks
 
 def add_to_cart(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -23,9 +24,14 @@ def add_to_cart(request, pk):
 
 def remove_from_cart(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    user_cart = get_object_or_404(Cart, user=request.user)
-    user_cart.items.remove(item)
-    # Increase the item's stocks in the database when removed from the cart
+    cart_item = get_object_or_404(CartItem, user=request.user, item=item)
+
+    # Call the update_stocks function before removing the item from the cart
+    update_stocks(item, cart_item.quantity)
+
+    # Delete the CartItem instance
+    cart_item.delete()
+
     return redirect('cart_items')
 
 def cart_items(request):

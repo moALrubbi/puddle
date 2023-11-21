@@ -1,0 +1,24 @@
+<!-- statistics.html -->
+
+{% extends 'core/base.html' %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold mb-6">Top 3 Items</h1>
+
+    <div class="grid grid-cols-3 gap-6">
+        {% for item in top_items %}
+            <div class="border rounded-lg p-4">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="rounded-md mb-4 w-48 h-auto">
+
+                <h2 class="text-xl font-semibold mb-2">{{ item.name }}</h2>
+                <p class="text-gray-500 mb-2">Price: ${{ item.price }}</p>
+                <p class="text-gray-600">{{ item.description }}</p>
+                
+                <p class="mt-4">Sales Count: {{ item.quantity_sold }}</p>
+                <!-- Add other item details as needed -->
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

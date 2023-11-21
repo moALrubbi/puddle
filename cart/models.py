@@ -1,3 +1,4 @@
+#cart/models.py
 from django.db import models
 from django.contrib.auth.models import User
 from item.models import Item  # Import the Item model from the 'item' app
@@ -16,3 +17,16 @@ class CartItem(models.Model):
 
     def __str__(self):
         return self.item.name
+
+
+def update_stocks(item, quantity):
+    """
+    Update the stocks of an item based on the given quantity.
+    """
+    if quantity <= item.stocks:
+        item.stocks = max(item.stocks - quantity, 0)
+        item.save()
+    else:
+        # Handle insufficient stock, e.g., notify the user or adjust the quantity
+        # You might raise an exception, log a warning, or take other appropriate actions
+        print(f"Insufficient stock for item {item.name}")

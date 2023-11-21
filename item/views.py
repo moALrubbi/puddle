@@ -37,7 +37,7 @@ def detail(request, pk):
 @login_required
 def new(request):
     if request.method == 'POST':
-        form = NewItemForm(request.POST, request.FILES)
+        form = NewItemForm(request.POST, request.FILES)  # Pass FILES to handle file uploads
 
         if form.is_valid():
             item = form.save(commit=False)
@@ -79,6 +79,13 @@ def delete(request, pk):
 
     return redirect('dashboard:index')
 
+# item/views.py
+
 def get_data(request):
     data = Item.objects.values()  # Retrieve all data from the Item model
+
+    # Modify the data to include the image URL
+    for item in data:
+        item['image_url'] = request.build_absolute_uri(Item.objects.get(id=item['id']).image.url) if item['image'] else None
+
     return JsonResponse(list(data), safe=False)

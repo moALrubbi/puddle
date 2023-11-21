@@ -1,0 +1,10 @@
+<!-- checkout/templates/checkout/order_confirmation.html -->
+{% extends 'core/base.html' %}
+
+{% block title %}Order Confirmation{% endblock %}
+
+{% block content %}
+  <h1 class="text-3xl font-semibold mb-6">Order Confirmation</h1>
+  <p>Your order (Order #{{ order.pk }}) has been placed successfully!</p>
+  <!-- Display additional order details if needed -->
+{% endblock %}
