@@ -9,15 +9,12 @@ from .models import Order, OrderItem
 from .forms import CheckoutForm
 from orders.models import UserOrder
 from django.db.models import F 
-# Import necessary models and functions
 @login_required
 def checkout(request):
     if request.method == 'POST':
-        # Process the form submission
         checkout_form = CheckoutForm(request.POST)
 
         if checkout_form.is_valid():
-            # Extract form data
             first_name = checkout_form.cleaned_data['first_name']
             last_name = checkout_form.cleaned_data['last_name']
             street_name = checkout_form.cleaned_data['street_name']
@@ -26,20 +23,17 @@ def checkout(request):
             town_city = checkout_form.cleaned_data['town_city']
             phone_number = checkout_form.cleaned_data['phone_number']
             
-            # Check if 'additional_delivery_info' key exists in the form data
             if 'additional_delivery_info' in checkout_form.cleaned_data:
                 additional_delivery_info = checkout_form.cleaned_data['additional_delivery_info']
             else:
-                additional_delivery_info = None  # Set default value if the key is not present
+                additional_delivery_info = None  #
 
-            # Create an Order instance
             user = request.user
             items_in_cart = CartItem.objects.filter(user=user)
             total_price = sum(item.item.price * item.quantity for item in items_in_cart)
 
             order = Order.objects.create(user=user, total_price=total_price)
 
-            # Create DeliveryInformation and associate it with the Order
             delivery_info = DeliveryInformation.objects.create(
                 user=user,
                 first_name=first_name,
@@ -53,12 +47,10 @@ def checkout(request):
             )
             delivery_info.order = order  
             delivery_info.save()       
-            # Decrease the stock of items
             for cart_item in items_in_cart:
                 item = cart_item.item
                 quantity = cart_item.quantity
 
-                # Check if there is sufficient stock before creating the OrderItem
                 if quantity <= item.stocks:
                     OrderItem.objects.create(order=order, item=item, quantity=quantity)
                     update_stocks(item, quantity)
@@ -72,12 +64,11 @@ def checkout(request):
                          'error_message': f'Insufficient stock for {item.name}. Please adjust the quantity or remove the item from your cart.'}
                     )
 
-            # Clear the user's cart
             items_in_cart.delete()
 
             return render(request, 'checkout/order_confirmation.html', {'order': order})
         else:
-            # Form is not valid, handle accordingly
+            
             items_in_cart = CartItem.objects.filter(user=request.user)
             total_price = sum(item.item.price * item.quantity for item in items_in_cart)
             return render(
@@ -87,7 +78,6 @@ def checkout(request):
             )
 
     else:
-        # Display the checkout form
         checkout_form = CheckoutForm()
         items_in_cart = CartItem.objects.filter(user=request.user)
         total_price = sum(item.item.price * item.quantity for item in items_in_cart)
@@ -99,7 +89,7 @@ from .models import DeliveryInformation, Order, OrderItem
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from item.models import Item  # Import the Item model from your application
+from item.models import Item  
 
 @csrf_exempt
 def place_order(request):
@@ -126,7 +116,7 @@ def place_order(request):
                 additional_delivery_info=delivery_info['additionalDeliveryInfo']
             )
 
-            order = Order.objects.create(user=user, total_price=0)  # Create an Order instance
+            order = Order.objects.create(user=user, total_price=0)  
 
             total_order_price = 0
 
@@ -135,16 +125,14 @@ def place_order(request):
 
                 item_price = item_data['price']
                 item_quantity = item_data['quantity']
-                total_order_price += item_price * item_quantity  # Calculate total price for each item
+                total_order_price += item_price * item_quantity  
 
-                # Create OrderItem instances associated with the Order and Item
                 order_item = OrderItem.objects.create(
                     order=order,
                     item=item,
                     quantity=item_quantity
                 )
 
-                # Decrease stocks and increase quantity_sold
                 if item.stocks >= item_quantity:
                     item.stocks -= item_quantity
                     item.quantity_sold += item_quantity

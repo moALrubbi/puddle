@@ -17,8 +17,11 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"Order: {self.order.pk}, Item: {self.item.name}, Quantity: {self.quantity}"
 
+from django.db import models
+from django.contrib.auth.models import User
+
 class DeliveryInformation(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     street_name = models.CharField(max_length=255)

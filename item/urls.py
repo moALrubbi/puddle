@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_data
+from .views import  get_data
 
 from . import views
 
