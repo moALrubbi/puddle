@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-j4ippt+3h39u4ontllpc8a(4h&^god(7aicz#@q^sl_(w)2otp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com', 'localhost:3000']
+ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
 }
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','http://localhost:3000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000','http://localhost:3000','http://localhost:8081']
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -73,8 +73,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Add your frontend URL
-    "http://localhost:8000",  # Add your backend URL with the correct scheme and netloc
+    "http://localhost:3000",  
+    "http://localhost:8000",  
+    "http://localhost:8081",  
+
 ]
 ROOT_URLCONF = 'puddle.urls'
 
@@ -142,7 +144,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = True  # This setting allows all origins, can be set to specific origins for security.
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

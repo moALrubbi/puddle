@@ -6,17 +6,16 @@
     <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
         <h2 class="mb-12 text-2xl text-center">Newest items</h2>
 
-        <div class="grid grid-cols-3 gap-3">
+        <div class="item-container" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
             {% for item in items %}
-                <div>
+                <div style="width: 300px; height: 400px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <a href="{% url 'item:detail' item.id %}">
-                        <div>
-                            <img src="{{ item.image.url }}" class="rounded-t-xl">
-                        </div>
-
-                        <div class="p-6 bg-white rounded-b-xl">
-                            <h2 class="text-2xl">{{ item.name }}</h2>
-                            <p class="text-gray-500">Price: {{ item.price }}</p>
+                        <div class="item-content" style="height: 100%; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="width: 100%; height: 70%; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            <div class="p-6 bg-white rounded-b-xl" style="height: 30%;">
+                                <h2 class="text-2xl">{{ item.name }}</h2>
+                                <p class="text-gray-500">Price: {{ item.price }}</p>
+                            </div>
                         </div>
                     </a>
                 </div>

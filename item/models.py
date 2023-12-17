@@ -26,6 +26,7 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     quantity = models.IntegerField(default=1)
     quantity_sold = models.IntegerField(default=0)  # New field to track sales count
+    favorited_by = models.ManyToManyField(User, related_name='favorite_items', blank=True)
 
     def __str__(self):
         return self.name

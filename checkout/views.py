@@ -150,3 +150,4 @@ def place_order(request):
             return JsonResponse({'success': False, 'error': 'Failed to place order', 'exception': str(e)})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+

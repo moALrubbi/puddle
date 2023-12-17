@@ -4,6 +4,7 @@
         <meta name="csrf-token" content="{{ csrf_token }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <script src="https://cdn.tailwindcss.com"></script>
         <title>{% block title %}{% endblock %} | Alrubbi</title>
     </head>
@@ -17,6 +18,7 @@
                 <a href="{% url 'cart' %}" class="text-lg font-semibold hover:text-gray-500">Cart</a>
                 <a href="{% url 'item:items' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
                 <a href="{% url 'user_orders' %}" class="text-lg font-semibold hover:text-gray-500">Orders</a>
+                <a href="{% url 'item:favorite_items' %}" class="text-lg font-semibold hover:text-gray-500">Favourite</a>
 
 
                 {% if request.user.is_authenticated %}

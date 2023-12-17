@@ -30,6 +30,21 @@
         {% else %}  
             <a href="{% url 'conversation:new' item.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact seller</a>
             <a href="{% url 'add_to_cart' pk=item.pk %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Add to Cart</a>
+<!-- Add to favorites heart icon -->
+<form method="post" action="{% url 'item:add_to_favorite' item.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="text-red-500 flex items-center">
+        {% if request.user in item.favorited_by.all %}
+            <i class="fas fa-heart fa-2x mr-2 mt-1 text-red-500"></i> <!-- Filled heart icon if already favorited -->
+            <span class="mt-1">Remove from Favorites</span>
+        {% else %}
+            <i class="far fa-heart fa-2x mr-2 mt-1 text-red-500"></i> <!-- Outline heart icon if not favorited -->
+            <span class="mt-1">Add to Favorites</span>
+        {% endif %}
+    </button>
+</form>
+
+
 
         {% endif %}
     </div>
